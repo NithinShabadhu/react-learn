@@ -1,44 +1,92 @@
-"use strict";
+'use strict';
 
-console.log("hello");
-var userName = "nithin shabadhu";
-var user = {
-    name: 'nithin',
-    age: 23,
-    empid: 2338
+console.log('App.js is running!');
+
+var app = {
+    title: 'Indecision App',
+    subtitle: 'Put your life in the hands of a computer',
+    options: []
 };
 
-function getEmpid(empid) {
-    if (empid) {
-        return React.createElement(
-            "p",
-            null,
-            " empid: ",
-            empid,
-            " "
-        );
+var onFormSubmit = function onFormSubmit(e) {
+    e.preventDefault();
+    var option = e.target.elements.option.value;
+    if (option) {
+        app.options.push(option);
+
+        e.target.elements.option.value = '';
+        renderForm();
     }
-}
-var template = React.createElement(
-    "div",
-    null,
-    React.createElement(
-        "h1",
-        null,
-        " ",
-        user.name ? user.name : "Anonymous",
-        " "
-    ),
-    user.age && user.age > 18 && React.createElement(
-        "p",
-        null,
-        " age: ",
-        user.age,
-        " "
-    ),
-    getEmpid(user.empid)
-);
+};
+var onRemoveAll = function onRemoveAll() {
+    app.options = [];
+    renderForm();
+};
 
-var app = document.getElementById("app");
+var onMakeDecision = function onMakeDecision() {
+    var random = Math.floor(Math.random() * app.options.length);
+    var option = app.options[random];
+    alert(option);
+};
 
-ReactDOM.render(template, app);
+var appRoot = document.getElementById('app');
+
+var renderForm = function renderForm() {
+    var template = React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'h1',
+            null,
+            app.title
+        ),
+        app.subtitle && React.createElement(
+            'p',
+            null,
+            app.subtitle
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length > 0 ? 'Here are your options' : 'No options'
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length
+        ),
+        React.createElement(
+            'button',
+            { disabled: app.options.length === 0, onClick: onMakeDecision },
+            'What Should I Do?'
+        ),
+        React.createElement(
+            'button',
+            { onClick: onRemoveAll },
+            'Remove All'
+        ),
+        React.createElement(
+            'ol',
+            null,
+            app.options.map(function (option) {
+                return React.createElement(
+                    'li',
+                    { key: option },
+                    option
+                );
+            })
+        ),
+        React.createElement(
+            'form',
+            { onSubmit: onFormSubmit },
+            React.createElement('input', { type: 'text', name: 'option' }),
+            React.createElement(
+                'button',
+                null,
+                'Add Option'
+            )
+        )
+    );
+    ReactDOM.render(template, appRoot);
+};
+renderForm();
