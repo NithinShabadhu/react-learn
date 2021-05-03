@@ -20,7 +20,7 @@ var Counter = function (_React$Component) {
     _this.handleMinuOne = _this.handleMinuOne.bind(_this);
     _this.handleReset = _this.handleReset.bind(_this);
     _this.state = {
-      count: 0
+      count: props.count
     };
     return _this;
   }
@@ -89,6 +89,9 @@ var Counter = function (_React$Component) {
   return Counter;
 }(React.Component);
 
+Counter.defaultProps = {
+  count: 0
+};
 ReactDOM.render(React.createElement(Counter, null), document.getElementById('app'));
 
 // let count = 0;
